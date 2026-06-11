@@ -1,0 +1,53 @@
+name: AI Commit Check
+description: Detect AI-authored commits or AI metadata trailers in a commit range.
+author: Joona Aalto
+
+branding:
+    icon: git-commit
+    color: red
+
+inputs:
+    base-sha:
+        description: Start of the commit range (exclusive). Defaults to the pull request base SHA, or the "before" SHA on push.
+        required: false
+        default: ""
+    head-sha:
+        description: End of the commit range (inclusive). Defaults to the pull request head SHA, or the "after" SHA on push.
+        required: false
+        default: ""
+    base-ref:
+        description: Base branch name to fetch so the range is reachable. Defaults to the pull request base ref.
+        required: false
+        default: ""
+    fail-on-detection:
+        description: When "true", exit non-zero if any AI-authored commits are detected. Set to "false" to only report via outputs.
+        required: false
+        default: "true"
+    pattern:
+        description: Override the regular expression used to flag AI metadata. When empty, a built-in pattern is used.
+        required: false
+        default: ""
+
+outputs:
+    ai-commits-found:
+        description: '"true" if any AI-authored commits were detected, otherwise "false".'
+        value: ${{ steps.check.outputs.ai-commits-found }}
+    count:
+        description: Number of commits flagged as AI-authored.
+        value: ${{ steps.check.outputs.count }}
+    commits:
+        description: Newline-separated list of flagged commit SHAs.
+        value: ${{ steps.check.outputs.commits }}
+
+runs:
+    using: composite
+    steps:
+        - id: check
+          shell: bash
+          env:
+              AICC_BASE_SHA: ${{ inputs.base-sha || github.event.pull_request.base.sha || github.event.before }}
+              AICC_HEAD_SHA: ${{ inputs.head-sha || github.event.pull_request.head.sha || github.event.after }}
+              AICC_BASE_REF: ${{ inputs.base-ref || github.event.pull_request.base.ref }}
+              AICC_FAIL_ON_DETECTION: ${{ inputs.fail-on-detection }}
+              AICC_PATTERN: ${{ inputs.pattern }}
+          run: "${{ github.action_path }}/scripts/check.sh"
