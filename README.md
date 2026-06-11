@@ -28,7 +28,7 @@ jobs:
 
 ### Custom Failure
 
-If you want to handle failure manually, you can set `fail-on-detection: false` and use the outputs:
+If you want to handle failure manually, you can set `fail-on-detection: false` and use the [outputs](#outputs):
 
 ```yaml
 - id: ai-check
@@ -39,24 +39,6 @@ If you want to handle failure manually, you can set `fail-on-detection: false` a
 - if: steps.ai-check.outputs.ai-commits-found == 'true'
   run: echo "::warning::Found ${{ steps.ai-check.outputs.count }} AI commit(s)"
 ```
-
-## Inputs
-
-| Input               | Default                     | Description                                                                                   |
-| ------------------- | --------------------------- | --------------------------------------------------------------------------------------------- |
-| `base-sha`          | PR base SHA / push `before` | Start of the commit range (exclusive).                                                        |
-| `head-sha`          | PR head SHA / push `after`  | End of the commit range (inclusive).                                                          |
-| `base-ref`          | PR base ref                 | Base branch name to fetch so the range is reachable.                                          |
-| `fail-on-detection` | `true`                      | When `true`, exit non-zero if AI commits are detected. Set to `false` to only report outputs. |
-| `pattern`           | built-in                    | Override the regex used to flag AI metadata.                                                  |
-
-## Outputs
-
-| Output             | Description                                        |
-| ------------------ | -------------------------------------------------- |
-| `ai-commits-found` | `"true"` if any AI-authored commits were detected. |
-| `count`            | Number of commits flagged as AI-authored.          |
-| `commits`          | Newline-separated list of flagged commit SHAs.     |
 
 ## Examples
 
@@ -119,6 +101,24 @@ Author: Ada Lovelace <ada@example.com>
 This is a long-overdue improvement — flaky networks were causing
 intermittent failures, so requests now retry with backoff. 🚀
 ```
+
+## Inputs
+
+| Input               | Default                     | Description                                                                                   |
+| ------------------- | --------------------------- | --------------------------------------------------------------------------------------------- |
+| `base-sha`          | PR base SHA / push `before` | Start of the commit range (exclusive).                                                        |
+| `head-sha`          | PR head SHA / push `after`  | End of the commit range (inclusive).                                                          |
+| `base-ref`          | PR base ref                 | Base branch name to fetch so the range is reachable.                                          |
+| `fail-on-detection` | `true`                      | When `true`, exit non-zero if AI commits are detected. Set to `false` to only report outputs. |
+| `pattern`           | built-in                    | Override the regex used to flag AI metadata.                                                  |
+
+## Outputs
+
+| Output             | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| `ai-commits-found` | `"true"` if any AI-authored commits were detected. |
+| `count`            | Number of commits flagged as AI-authored.          |
+| `commits`          | Newline-separated list of flagged commit SHAs.     |
 
 ## Notes
 
