@@ -5,6 +5,15 @@ A GitHub Action that detects AI-authored commits or AI metadata trailers within 
 By default, the action causes a CI check to fail when an AI commit is found.
 This behavior can be disabled if you wish to react to the [outputs](#outputs) yourself.
 
+> [!WARNING]
+> This action should cover most common AI signature patterns (Claude, Copilot, Cursor, Codex,
+> ChatGPT, Gemini, Jules, Devin, Aider) but may not be entirely comprehensive, especially
+> as models evolve and change. See [`scripts/check.sh`](scripts/check.sh) for the current
+> default patterns. Please [open an issue][new-issue] or a PR if you find patterns that
+> were missed, or any false positives!
+
+[new-issue]: https://github.com/Jondolf/ai-commit-check/issues/new
+
 ## Usage
 
 ```yaml
@@ -32,7 +41,7 @@ If you want to handle failure manually, you can set `fail-on-detection: false` a
 
 ```yaml
 - id: ai-check
-  uses: joona/ai-commit-check@v1
+  uses: Jondolf/ai-commit-check@v1
   with:
       fail-on-detection: false
 
