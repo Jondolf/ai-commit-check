@@ -27,7 +27,7 @@ jobs:
     no-ai-commits:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   # Required so the full commit range is available
                   fetch-depth: 0
