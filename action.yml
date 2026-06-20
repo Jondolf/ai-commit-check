@@ -50,4 +50,4 @@ runs:
               AICC_BASE_REF: ${{ inputs.base-ref || github.event.pull_request.base.ref }}
               AICC_FAIL_ON_DETECTION: ${{ inputs.fail-on-detection }}
               AICC_PATTERN: ${{ inputs.pattern }}
-          run: "${{ github.action_path }}/scripts/check.sh"
+          run: bash "${{ github.action_path }}/scripts/check.sh"
